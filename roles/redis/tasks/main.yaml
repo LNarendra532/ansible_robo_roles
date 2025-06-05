@@ -1,0 +1,31 @@
+- name: Disable Redis module
+  ansible.builtin.command: dnf module disable redis -y
+
+- name: enble redis module
+  ansible.builtin.command: dnf module enable redis:7 -y
+
+- name: installing redis
+  ansible.builtin.dnf:
+    name: redis
+    state: present
+  
+- name: Replaethe ip address to 0.0.0.0
+  ansible.builtin.replace:
+    path: /etc/redis/redis.conf
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'
+
+- name: Replace a specific line in a config file
+  ansible.builtin.lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: 'protected-mode'
+    line: protected-mode no
+
+- name: enable and start redis
+  ansible.builtin.service:
+    name: redis
+    state: started
+    enabled: yes
+
+#nohup ansible-playbook -i inventory.ini redis.yaml &>> /home/ec2-user/redis.log & - this will run in backgroupnd
+  # we can store our logs 

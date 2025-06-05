@@ -1,0 +1,36 @@
+
+
+- name: maven setup
+  include_role:
+    name: common 
+    tasks_from: maven
+
+- name: app setup
+  include_role:
+    name: common 
+    tasks_from: app-setup
+
+
+
+- name: import the db with root db_user
+  tags: 
+  - import   # we can run required part the of snippet by using the tags
+  community.mysql.mysql_db:
+    name: all #                     name should only be provided if state is dump or import.
+    login_user: "{{ MYSQL_ROOT_USER }}"
+    login_password: "{{ MYSQL_ROOT_PASSWORD }}"
+    login_host: "{{ MYSQL_HOST }}"
+    state: import
+    target: "{{ item }}"
+  loop:
+  - /app/db/schema.sql
+  - /app/db/app-user.sql
+  - /app/db/master-data.sql
+
+
+- name: systemd setup
+  include_role:
+    name: common 
+    tasks_from: systemd.yaml
+
+  

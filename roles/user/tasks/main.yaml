@@ -1,0 +1,23 @@
+- name: app setup
+  include_from:
+    name: common
+    import_tasks: app-setup
+
+- name: nodejs setup
+  include_from:
+    name: common
+    import_tasks: nodejs
+
+- name: nodejs setup
+  include_from:
+    name: common
+    import_tasks: systemd.yaml
+
+
+
+
+
+
+
+  
+  

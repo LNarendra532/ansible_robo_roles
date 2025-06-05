@@ -1,0 +1,34 @@
+
+- name: copy repo file
+  ansible.builtin.copy:
+    src: mongo.repo
+    dest: /etc/yum.repos.d/mongo.repo
+
+- name: Install mongodb
+  ansible.builtin.dnf:
+    name: mongodb-org
+    state: present
+    
+- name: Start service httpd, if not started
+  ansible.builtin.service:
+    name: mongod
+    state: started
+    enabled: yes
+
+- name: replace the ip address
+  ansible.builtin.replace:
+    path: /etc/mongod.conf
+    regexp: '127.0.0.1'
+    replace: '0.0.0.0'
+    
+- name: restart mongod
+  ansible.builtin.service:
+    name: mongod
+    state: restarted
+
+#run the file
+#anible-playbook -i inventory.ini -e ansible_user=ec2_user -e ansible_password=DevOps321 mongodb.yaml 
+
+  #nohup ansible-playbook -i inventory.ini mongodb.yaml &>>  /home/ec2-user/mongo.log & - this is run in background
+  # we can store our logs 
+    
