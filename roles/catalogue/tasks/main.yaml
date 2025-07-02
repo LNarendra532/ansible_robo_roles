@@ -31,11 +31,17 @@
   when: catalogue_output.stdout | int < 0
 
   
-- name: service setup
+- name: systemd_service setup
   include_role:
       name: common    # calling common role folder 
       tasks_from: systemd.yaml   # in this daemon reload , service statrt and restart
 
+# - name: Deployment
+#   tags: 
+#   - deployment
+#   import_role:
+#     name: common
+#     tasks_from: deployment
 
   
 
